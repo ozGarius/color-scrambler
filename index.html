@@ -1,515 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Color Scrambler</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        h1 {
-            text-align: center;
-            color: #667eea;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-        }
-
-        .controls {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-        }
-
-        .control-group {
-            margin-bottom: 20px;
-        }
-
-        .control-group:last-child {
-            margin-bottom: 0;
-        }
-
-        .control-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #495057;
-            font-size: 1.1em;
-        }
-
-        .radio-group, .checkbox-group {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .radio-option, .checkbox-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            padding: 8px 12px;
-            background: white;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
-
-        .radio-option:hover, .checkbox-option:hover {
-            background: #e9ecef;
-        }
-
-        input[type="radio"], input[type="checkbox"] {
-            cursor: pointer;
-            width: 18px;
-            height: 18px;
-        }
-
-        .file-input-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-
-        input[type="file"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px dashed #667eea;
-            border-radius: 8px;
-            cursor: pointer;
-            background: white;
-            font-size: 1em;
-        }
-
-        input[type="file"]:hover {
-            border-color: #764ba2;
-            background: #f8f9fa;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        button {
-            padding: 14px 32px;
-            font-size: 1.1em;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .process-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .process-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .download-btn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .download-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
-        }
-
-        .images-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .image-box {
-            text-align: center;
-        }
-
-        .image-box h3 {
-            margin-bottom: 15px;
-            color: #495057;
-            font-size: 1.3em;
-        }
-
-        .image-wrapper {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #dee2e6;
-        }
-
-        canvas {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .placeholder {
-            color: #adb5bd;
-            font-style: italic;
-        }
-
-        @media (max-width: 768px) {
-            .images-container {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                font-size: 1.8em;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            button {
-                width: 100%;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <div class="container">
-        <h1>🎨 Color Scrambler</h1>
-        
-        <div class="controls">
-            <div class="control-group">
-                <label>Upload Image:</label>
-                <input type="file" id="fileInput" accept="image/*">
-            </div>
+    <div class="app-wrapper">
+        <!-- Sidebar: Controls & Settings -->
+        <aside class="sidebar" id="sidebar">
+            <header>
+                <h1>🎨 Color Scrambler</h1>
+                <button class="theme-toggle" id="themeToggle">
+                    <span id="themeIcon">🌙</span>
+                    <span id="themeText">Dark Mode</span>
+                </button>
+            </header>
 
-            <div class="control-group">
-                <label>Processing Mode:</label>
-                <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="mode" value="random" checked>
-                        <span>Random (each pixel independent)</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="mode" value="consistent">
-                        <span>Consistent (same color = same change)</span>
-                    </label>
+            <div class="controls-scroll">
+                <!-- Section 1: Upload (Static) -->
+                <div class="control-group">
+                    <label>1. Upload Image</label>
+                    <input type="file" id="fileInput" accept="image/*">
+                </div>
+
+                <!-- Reorderable Pipeline -->
+                <div id="effectPipeline" style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Module: Pixel Scramble -->
+                    <div class="control-group draggable" data-effect="scramble">
+                        <div class="control-group-header">
+                            <label>Pixel Scramble</label>
+                            <div class="drag-handle" title="Drag to reorder"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="scrambleHue" checked>
+                                <span>Scramble Hue</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="scrambleSaturation" checked>
+                                <span>Scramble Saturation</span>
+                            </label>
+                        </div>
+                        <div class="radio-group" style="margin-top: 8px; gap: 5px;">
+                            <select id="scrambleMode">
+                                <option value="random">Random Mode</option>
+                                <option value="consistent" selected>Consistent Mode</option>
+                            </select>
+                            <select id="brightnessMode">
+                                <option value="hsv">HSV Brightness</option>
+                                <option value="luminance" selected>Human Luminance</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Module: Channel Swap -->
+                    <div class="control-group draggable" data-effect="channelSwap">
+                        <div class="control-group-header">
+                            <label>Channel Swap</label>
+                            <div class="drag-handle" title="Drag to reorder"></div>
+                        </div>
+                        <select id="channelSwap">
+                            <option value="none" selected>None (RGB)</option>
+                            <option value="rbg">RBG</option>
+                            <option value="grb">GRB</option>
+                            <option value="gbr">GBR</option>
+                            <option value="brg">BRG</option>
+                            <option value="bgr">BGR</option>
+                        </select>
+                    </div>
+
+                    <!-- Module: Pixel Sorting -->
+                    <div class="control-group draggable" data-effect="pixelSort">
+                        <div class="control-group-header">
+                            <label>Pixel Sorting</label>
+                            <div class="drag-handle" title="Drag to reorder"></div>
+                        </div>
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="pixelSort">
+                            <span>Enable Sorting</span>
+                        </label>
+                        <div id="sortControls"
+                            style="display: none; margin-top: 5px; padding-left: 10px; border-left: 2px solid var(--primary);">
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                                <select id="sortDirection">
+                                    <option value="horizontal" selected>Horizontal</option>
+                                    <option value="vertical">Vertical</option>
+                                </select>
+                                <select id="sortCriteria">
+                                    <option value="brightness" selected>Brightness</option>
+                                    <option value="hue">Hue</option>
+                                    <option value="saturation">Saturation</option>
+                                </select>
+                                <input type="range" id="sortThreshold" min="0" max="255" value="100">
+                                <label class="checkbox-option" style="font-size: 0.75rem;">
+                                    <input type="checkbox" id="sortReverse">
+                                    <span>Reverse Order</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module: Chromatic Aberration -->
+                    <div class="control-group draggable" data-effect="ca">
+                        <div class="control-group-header">
+                            <label>Chromatic Aberration</label>
+                            <div class="drag-handle" title="Drag to reorder"></div>
+                        </div>
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="enableCA">
+                            <span>Enable RGB Split</span>
+                        </label>
+                        <div id="caControls"
+                            style="display: none; margin-top: 5px; padding-left: 10px; border-left: 2px solid var(--primary);">
+                            <label style="font-size: 0.7rem;">Intensity:</label>
+                            <input type="range" id="caIntensity" min="1" max="50" value="10" style="width: 100%;">
+                        </div>
+                    </div>
+
+                    <!-- Module: Dither & Retro -->
+                    <div class="control-group draggable" data-effect="dither">
+                        <div class="control-group-header">
+                            <label>Dither & Retro</label>
+                            <div class="drag-handle" title="Drag to reorder"></div>
+                        </div>
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="enableDither">
+                            <span>Enable Dithering</span>
+                        </label>
+                        <div id="ditherControls"
+                            style="display: none; margin-top: 5px; padding-left: 10px; border-left: 2px solid var(--primary);">
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                                <label style="font-size: 0.7rem;">Color Depth:</label>
+                                <select id="ditherDepth">
+                                    <option value="2">Low (2 levels)</option>
+                                    <option value="4" selected>Medium (4 levels)</option>
+                                    <option value="8">High (8 levels)</option>
+                                </select>
+                                <label style="font-size: 0.7rem;">Pixel Size:</label>
+                                <input type="range" id="ditherScale" min="1" max="10" value="1" style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module: Stained Glass -->
+                    <div class="control-group draggable" data-effect="voronoi">
+                        <div class="control-group-header">
+                            <label>Stained Glass</label>
+                            <div class="drag-handle" title="Drag to reorder"></div>
+                        </div>
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="enableVoronoi">
+                            <span>Enable Mosaic</span>
+                        </label>
+                        <div id="voronoiControls"
+                            style="display: none; margin-top: 5px; padding-left: 10px; border-left: 2px solid var(--primary);">
+                            <label style="font-size: 0.7rem;">Cell Count:</label>
+                            <input type="range" id="voronoiCells" min="50" max="5000" value="500" style="width: 100%;">
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="control-group">
-                <label>Scramble Options:</label>
-                <div class="checkbox-group">
-                    <label class="checkbox-option">
-                        <input type="checkbox" id="scrambleHue" checked>
-                        <span>Scramble Hue</span>
-                    </label>
-                    <label class="checkbox-option">
-                        <input type="checkbox" id="scrambleSaturation" checked>
-                        <span>Scramble Saturation</span>
-                    </label>
+            <div class="actions-container">
+                <button class="process-btn" id="processBtn" disabled>✨ Process Image</button>
+                <div class="button-group">
+                    <button class="download-btn" id="downloadBtn" disabled>📥 Download</button>
+                    <button class="secondary-btn" id="resetBtn">🔄 Reset</button>
+                </div>
+                <div class="button-group">
+                    <button class="secondary-btn" id="saveBtn">💾 Save Config</button>
+                    <button class="secondary-btn" id="loadBtn">📂 Load Config</button>
                 </div>
             </div>
+        </aside>
 
-            <div class="control-group">
-                <label>Brightness Preservation:</label>
-                <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="brightness" value="hsv" checked>
-                        <span>HSV Value (technical)</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="brightness" value="luminance">
-                        <span>Perceived Luminance (human vision)</span>
-                    </label>
-                </div>
-            </div>
+        <!-- Resizer Divider -->
+        <div class="resizer" id="resizer"></div>
 
-            <div class="button-group">
-                <button class="process-btn" id="processBtn" disabled>Process Image</button>
-                <button class="download-btn" id="downloadBtn" disabled>Download Result</button>
-            </div>
-        </div>
-
-        <div class="images-container">
-            <div class="image-box">
-                <h3>Original Image</h3>
-                <div class="image-wrapper">
-                    <canvas id="originalCanvas"></canvas>
-                    <div class="placeholder" id="originalPlaceholder">No image loaded</div>
+        <!-- Main Content: Image Previews -->
+        <main class="main-content">
+            <div class="images-layout">
+                <div class="image-box">
+                    <h3>Original</h3>
+                    <div class="image-wrapper">
+                        <canvas id="originalCanvas"></canvas>
+                        <div class="placeholder" id="originalPlaceholder">Waiting for image...</div>
+                    </div>
+                </div>
+                <div class="image-box">
+                    <h3>Scrambled</h3>
+                    <div class="image-wrapper">
+                        <canvas id="resultCanvas"></canvas>
+                        <div class="placeholder" id="resultPlaceholder">Results will appear here</div>
+                    </div>
                 </div>
             </div>
-            <div class="image-box">
-                <h3>Scrambled Image</h3>
-                <div class="image-wrapper">
-                    <canvas id="resultCanvas"></canvas>
-                    <div class="placeholder" id="resultPlaceholder">Process an image to see results</div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
-    <script>
-        const fileInput = document.getElementById('fileInput');
-        const processBtn = document.getElementById('processBtn');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const originalCanvas = document.getElementById('originalCanvas');
-        const resultCanvas = document.getElementById('resultCanvas');
-        const originalPlaceholder = document.getElementById('originalPlaceholder');
-        const resultPlaceholder = document.getElementById('resultPlaceholder');
-        const scrambleHue = document.getElementById('scrambleHue');
-        const scrambleSaturation = document.getElementById('scrambleSaturation');
-
-        let originalImage = null;
-
-        // Load image
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        originalImage = img;
-                        displayOriginal(img);
-                        processBtn.disabled = false;
-                        downloadBtn.disabled = true;
-                    };
-                    img.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Display original image
-        function displayOriginal(img) {
-            originalCanvas.width = img.width;
-            originalCanvas.height = img.height;
-            const ctx = originalCanvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            originalCanvas.style.display = 'block';
-            originalPlaceholder.style.display = 'none';
-        }
-
-        // RGB to HSV conversion
-        function rgbToHsv(r, g, b) {
-            r /= 255;
-            g /= 255;
-            b /= 255;
-
-            const max = Math.max(r, g, b);
-            const min = Math.min(r, g, b);
-            const delta = max - min;
-
-            let h = 0;
-            let s = max === 0 ? 0 : delta / max;
-            let v = max;
-
-            if (delta !== 0) {
-                if (max === r) {
-                    h = ((g - b) / delta + (g < b ? 6 : 0)) / 6;
-                } else if (max === g) {
-                    h = ((b - r) / delta + 2) / 6;
-                } else {
-                    h = ((r - g) / delta + 4) / 6;
-                }
-            }
-
-            return [h, s, v];
-        }
-
-        // HSV to RGB conversion
-        function hsvToRgb(h, s, v) {
-            let r, g, b;
-
-            const i = Math.floor(h * 6);
-            const f = h * 6 - i;
-            const p = v * (1 - s);
-            const q = v * (1 - f * s);
-            const t = v * (1 - (1 - f) * s);
-
-            switch (i % 6) {
-                case 0: r = v; g = t; b = p; break;
-                case 1: r = q; g = v; b = p; break;
-                case 2: r = p; g = v; b = t; break;
-                case 3: r = p; g = q; b = v; break;
-                case 4: r = t; g = p; b = v; break;
-                case 5: r = v; g = p; b = q; break;
-            }
-
-            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-        }
-
-        // Calculate perceived luminance (Rec. 709)
-        function calculateLuminance(r, g, b) {
-            return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-        }
-
-        // Adjust RGB to match target luminance
-        function adjustToLuminance(r, g, b, targetLuminance) {
-            const currentLuminance = calculateLuminance(r, g, b);
-            if (currentLuminance === 0) return [r, g, b];
-
-            const ratio = targetLuminance / currentLuminance;
-            
-            // Scale RGB values
-            r = Math.min(255, Math.max(0, r * ratio));
-            g = Math.min(255, Math.max(0, g * ratio));
-            b = Math.min(255, Math.max(0, b * ratio));
-
-            // Iteratively adjust to get closer to target
-            for (let i = 0; i < 10; i++) {
-                const newLuminance = calculateLuminance(r, g, b);
-                const diff = targetLuminance - newLuminance;
-                
-                if (Math.abs(diff) < 0.5) break;
-                
-                const adjustment = diff / 255;
-                r = Math.min(255, Math.max(0, r + adjustment * 0.2126 * 255));
-                g = Math.min(255, Math.max(0, g + adjustment * 0.7152 * 255));
-                b = Math.min(255, Math.max(0, b + adjustment * 0.0722 * 255));
-            }
-
-            return [Math.round(r), Math.round(g), Math.round(b)];
-        }
-
-        // Process image
-        processBtn.addEventListener('click', () => {
-            if (!originalImage) return;
-
-            const mode = document.querySelector('input[name="mode"]:checked').value;
-            const brightnessMode = document.querySelector('input[name="brightness"]:checked').value;
-            const doScrambleHue = scrambleHue.checked;
-            const doScrambleSaturation = scrambleSaturation.checked;
-
-            // Get image data
-            const ctx = originalCanvas.getContext('2d');
-            const imageData = ctx.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
-            const data = imageData.data;
-
-            // Color mapping for consistent mode
-            const colorMap = new Map();
-
-            // Process each pixel
-            for (let i = 0; i < data.length; i += 4) {
-                const r = data[i];
-                const g = data[i + 1];
-                const b = data[i + 2];
-                const a = data[i + 3];
-
-                // Skip transparent pixels
-                if (a === 0) continue;
-
-                let newR, newG, newB;
-
-                if (mode === 'consistent') {
-                    // Create color key
-                    const colorKey = `${r},${g},${b}`;
-                    
-                    if (colorMap.has(colorKey)) {
-                        // Use existing mapping
-                        [newR, newG, newB] = colorMap.get(colorKey);
-                    } else {
-                        // Generate new mapping
-                        [newR, newG, newB] = scramblePixel(r, g, b, brightnessMode, doScrambleHue, doScrambleSaturation);
-                        colorMap.set(colorKey, [newR, newG, newB]);
-                    }
-                } else {
-                    // Random mode - each pixel independent
-                    [newR, newG, newB] = scramblePixel(r, g, b, brightnessMode, doScrambleHue, doScrambleSaturation);
-                }
-
-                data[i] = newR;
-                data[i + 1] = newG;
-                data[i + 2] = newB;
-            }
-
-            // Display result
-            resultCanvas.width = originalCanvas.width;
-            resultCanvas.height = originalCanvas.height;
-            const resultCtx = resultCanvas.getContext('2d');
-            resultCtx.putImageData(imageData, 0, 0);
-            resultCanvas.style.display = 'block';
-            resultPlaceholder.style.display = 'none';
-            downloadBtn.disabled = false;
-        });
-
-        function scramblePixel(r, g, b, brightnessMode, doScrambleHue, doScrambleSaturation) {
-            if (brightnessMode === 'hsv') {
-                // HSV mode - preserve V
-                let [h, s, v] = rgbToHsv(r, g, b);
-                
-                if (doScrambleHue) {
-                    h = Math.random();
-                }
-                if (doScrambleSaturation) {
-                    s = Math.random();
-                }
-                
-                return hsvToRgb(h, s, v);
-            } else {
-                // Luminance mode - preserve perceived brightness
-                const targetLuminance = calculateLuminance(r, g, b);
-                
-                let [h, s, v] = rgbToHsv(r, g, b);
-                
-                if (doScrambleHue) {
-                    h = Math.random();
-                }
-                if (doScrambleSaturation) {
-                    s = Math.random();
-                }
-                
-                let [newR, newG, newB] = hsvToRgb(h, s, v);
-                [newR, newG, newB] = adjustToLuminance(newR, newG, newB, targetLuminance);
-                
-                return [newR, newG, newB];
-            }
-        }
-
-        // Download result
-        downloadBtn.addEventListener('click', () => {
-            const link = document.createElement('a');
-            link.download = 'scrambled-image.png';
-            link.href = resultCanvas.toDataURL();
-            link.click();
-        });
-    </script>
+    <script src="script.js" defer></script>
 </body>
+
 </html>

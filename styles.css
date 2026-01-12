@@ -1,0 +1,334 @@
+:root {
+    --primary: #667eea;
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --container-bg: #ffffff;
+    --text-main: #333333;
+    --text-muted: #495057;
+    --bg-soft: #f8f9fa;
+    --border-color: #dee2e6;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --input-bg: #ffffff;
+    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --sidebar-width: 350px;
+}
+
+[data-theme="dark"] {
+    --container-bg: #1e1e2e;
+    --text-main: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --bg-soft: #2a2a3d;
+    --border-color: #3f3f5a;
+    --input-bg: #2a2a3d;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    height: 100vh;
+    overflow: hidden;
+    color: var(--text-main);
+    transition: background 0.5s ease;
+    font-size: 0.9rem;
+    /* Reduced base font size */
+}
+
+.app-wrapper {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    background: var(--container-bg);
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: var(--sidebar-width);
+    min-width: 280px;
+    max-width: 600px;
+    height: 100%;
+    overflow-y: auto;
+    background: var(--bg-soft);
+    border-right: 1px solid var(--border-color);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.5s ease;
+}
+
+header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+h1 {
+    color: var(--primary);
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+}
+
+.theme-toggle {
+    width: 100%;
+    background: var(--container-bg);
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* Resizer */
+.resizer {
+    width: 6px;
+    cursor: col-resize;
+    background: var(--border-color);
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.resizer:hover,
+.resizer.resizing {
+    background: var(--primary);
+}
+
+/* Main Content Area */
+.main-content {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.controls-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.control-group {
+    background: var(--container-bg);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    position: relative;
+    transition: var(--transition);
+}
+
+.control-group.draggable {
+    cursor: default;
+}
+
+.control-group.dragging {
+    opacity: 0.5;
+    border: 2px dashed var(--primary);
+    transform: scale(0.98);
+}
+
+.control-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.control-group-header label {
+    margin-bottom: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.drag-handle {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    cursor: grab;
+    color: var(--text-muted);
+    background: var(--bg-soft);
+    border-radius: 4px;
+    font-family: monospace;
+    font-weight: bold;
+    user-select: none;
+    transition: var(--transition);
+}
+
+.drag-handle:hover {
+    color: var(--primary);
+    background: var(--border-color);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.drag-handle::after {
+    content: ":::";
+    font-size: 16px;
+    letter-spacing: -1.5px;
+    line-height: 0.5;
+}
+
+.control-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-main);
+    font-size: 0.8rem;
+}
+
+.radio-group,
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.radio-option,
+.checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 6px 10px;
+    background: var(--bg-soft);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+.radio-option:hover,
+.checkbox-option:hover {
+    background: var(--border-color);
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    accent-color: var(--primary);
+    width: 16px;
+    height: 16px;
+}
+
+input[type="file"] {
+    font-size: 0.8rem;
+    padding: 10px;
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+.actions-container {
+    margin-top: auto;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.button-group .process-btn {
+    grid-column: span 2;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+}
+
+/* Images Display Area */
+.images-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    height: 100%;
+}
+
+.image-box {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.image-box h3 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.image-wrapper {
+    flex: 1;
+    background: var(--bg-soft);
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    min-height: 200px;
+}
+
+canvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+@media (max-width: 800px) {
+    .app-wrapper {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100% !important;
+        height: auto;
+        max-height: 50vh;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .resizer {
+        height: 6px;
+        width: 100%;
+        cursor: row-resize;
+    }
+
+    .images-layout {
+        grid-template-columns: 1fr;
+    }
+}
